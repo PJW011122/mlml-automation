@@ -32,7 +32,7 @@ PROP = {
     "key": "ID",            # 텍스트 — upsert 키
     "deadline": "마감일",    # 날짜
     "abstract": "초록 마감일",  # 날짜 (선택)
-    "rank": "Tier",         # 선택 — CCF 등급 A/B/C/N
+    "rank": "CCF Tier",         # 선택 — CCF 등급 A/B/C/N
     "sub": "분야",          # 선택
     "link": "링크",         # URL
     "venue": "개최",        # 텍스트
