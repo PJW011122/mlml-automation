@@ -1,0 +1,21 @@
+# 추적할 학회 (ccf-deadlines의 title과 동일하게, 대소문자 무관)
+# 한 줄에 하나, # 뒤는 주석. 수정 후 push 하면 다음 실행 때 반영됨.
+
+# ML / AI
+NEURIPS
+ICML
+ICLR
+AAAI
+IJCAI
+
+# Vision
+CVPR
+ICCV
+ECCV
+
+# NLP
+ACL
+EMNLP
+NAACL
+
+# 필요하면 추가: KDD, WWW, SIGIR, MM, AISTATS, UAI ...

@@ -1,0 +1,35 @@
+name: Sync CCF deadlines to Notion
+
+on:
+  schedule:
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+  push:
+    paths:
+      - "notion/**"
+      - ".github/workflows/sync-ccf.yml"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: ccfddl/ccf-deadlines
+          path: ccf
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r notion/requirements.txt
+
+      - name: Sync
+        working-directory: notion
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}
+          CCF_DIR: ../ccf
+        run: python sync.py
