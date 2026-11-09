@@ -192,14 +192,19 @@ def check_schema(schema: dict) -> set[str]:
     return usable
 
 
+def kst_str(dt: datetime) -> str:
+    """Notion은 time_zone을 주면 오프셋 없는 로컬 시각을 요구한다."""
+    return dt.astimezone(KST).strftime("%Y-%m-%dT%H:%M:%S")
+
+
 def to_props(row: dict, usable: set[str]) -> dict:
     p = {
         PROP["title"]: {"title": [{"text": {"content": row["title"]}}]},
         PROP["key"]: {"rich_text": [{"text": {"content": row["key"]}}]},
-        PROP["deadline"]: {"date": {"start": row["deadline"].isoformat(), "time_zone": "Asia/Seoul"}},
+        PROP["deadline"]: {"date": {"start": kst_str(row["deadline"]), "time_zone": "Asia/Seoul"}},
     }
     if "abstract" in usable and row["abstract"]:
-        p[PROP["abstract"]] = {"date": {"start": row["abstract"].isoformat(), "time_zone": "Asia/Seoul"}}
+        p[PROP["abstract"]] = {"date": {"start": kst_str(row["abstract"]), "time_zone": "Asia/Seoul"}}
     if "rank" in usable:
         p[PROP["rank"]] = {"select": {"name": row["rank"]}}
     if "sub" in usable:
