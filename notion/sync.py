@@ -143,10 +143,17 @@ def resolve_data_source() -> tuple[str, dict]:
         sources = r.json().get("data_sources", [])
         if not sources:
             sys.exit("이 데이터베이스에 데이터 소스가 없습니다.")
-        if len(sources) > 1:
-            names = ", ".join(s.get("name", "?") for s in sources)
-            print(f"[warn] 데이터 소스가 {len(sources)}개 ({names}) — 첫 번째에 기록합니다.", file=sys.stderr)
         ds_id = sources[0]["id"]
+        if len(sources) > 1:
+            # 여러 소스 중 제목 속성 이름이 맞는 것을 고른다
+            for s in sources:
+                sch = req("GET", f"/data_sources/{s['id']}")["properties"]
+                if PROP["title"] in sch:
+                    ds_id = s["id"]
+                    break
+            names = ", ".join(s.get("name", "?") for s in sources)
+            print(f"[warn] 데이터 소스가 {len(sources)}개 ({names}) — '{PROP['title']}' 속성이 있는 소스에 기록합니다. "
+                  f"비어 있는 소스는 Notion에서 삭제하는 것을 권장.", file=sys.stderr)
     else:
         # 데이터 소스 ID를 직접 넣었을 수도 있음
         r2 = requests.get(f"{API}/data_sources/{NOTION_DB_ID}", headers=HEADERS, timeout=30)
